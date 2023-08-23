@@ -426,5 +426,3 @@ gameOver();
 
  // Start the game loop
  requestAnimationFrame(gameLoop);
-
- //teste bonito

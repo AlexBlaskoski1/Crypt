@@ -443,4 +443,5 @@ gameOver();
 
  // Start the game loop
  requestAnimationFrame(gameLoop);
-//comentario
+
+ //teste bonito

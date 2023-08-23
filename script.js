@@ -10,7 +10,7 @@
    color: 'blue',
    speed: 300, // Pixels per second
    score: 0,
-   weapon: { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'none' },
+   weapon: { type: 'Pistola', color: 'black', damage: 30, cooldown: 0.5, ability: 'none' },
    powerUp: false,
    powerUpDuration: 5, // Power-up duration in seconds
    lives: 3, // Número inicial de vidas
@@ -32,7 +32,7 @@
 
  // Weapons array
  const weapons = [
- { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'piercing' },
+ { type: 'Pistola', color: 'black', damage: 30, cooldown: 0.5, ability: 'piercing' },
    { type: 'shotgun', color: 'brown', damage: 20, cooldown: 1.5, ability: 'spread' },
    { type: 'machinegun', color: 'gray', damage: 15, cooldown: 0.2, ability: 'rapid' },
    { type: 'rocket launcher', color: 'orange', damage: 50, cooldown: 2.0, ability: 'explosive' },

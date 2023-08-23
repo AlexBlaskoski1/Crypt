@@ -13,6 +13,8 @@
    weapon: { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'none' },
    powerUp: false,
    powerUpDuration: 5, // Power-up duration in seconds
+   lives: 3, // Número inicial de vidas
+
  };
 
  // Time variables
@@ -211,6 +213,11 @@ if (player.weapon.ability === 'rapid') {
 
  // Game loop
  function gameLoop(timestamp) {
+   // Se o jogador ficar sem vidas, chame a função gameOver
+   if (player.lives <= 0) {
+    gameOver();
+    return; // Pare de atualizar o loop se o jogo terminar
+  }
    // Calculate delta time
    deltaTime = (timestamp - lastTime) / 1000;
    lastTime = timestamp;
@@ -247,10 +254,17 @@ if (player.weapon.ability === 'rapid') {
      // Detect collision with player
      if (distance < player.radius + enemy.radius) {
        if (!player.invincible) {
-         gameOver();
-       }
-     }
-
+        player.lives--; // Reduza o número de vidas
+        if (player.lives <= 0) {
+          gameOver();
+        } else {
+          // Redefina a posição do jogador ou realize outras ações necessárias após perder uma vida
+          player.x = canvas.width / 2;
+          player.y = canvas.height / 2;
+          // Outras ações necessárias após a perda de uma vida
+        }
+      }
+    }
      // Remove enemies that are off-screen or defeated
      if (
        enemy.x < -enemy.radius ||
@@ -339,6 +353,9 @@ if (player.weapon.ability === 'rapid') {
    ctx.font = '24px Arial';
    ctx.fillStyle = 'black';
    ctx.fillText('Score: ' + player.score, 10, 30);
+   ctx.font = '24px Arial';
+ctx.fillStyle = 'black';
+ctx.fillText('Lives: ' + player.lives, 10, 90);
 
    // Draw player weapon
    ctx.font = '24px Arial';

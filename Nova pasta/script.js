@@ -49,7 +49,59 @@
    { type: 'invincibility', color: 'gold', ability: 'invincible' },
  ];
 
- // Spawn enemies
+ const spritesheet = new Image();
+ spritesheet.src = 'mage_guardian-blue.png';
+ 
+ const frameWidth = 64;  // Largura de cada frame
+ const frameHeight = 64; // Altura de cada frame
+ let currentFrame = 0;    // Índice do frame atual
+ const totalFrames = 12;   // Número total de frames no spritesheet
+ 
+ const frameDelay = 100;  // Atraso em milissegundos entre os quadros
+ 
+ // Array para armazenar inimigos
+ 
+ // Função para atualizar a animação
+ function updateAnimation(x, y) {
+   ctx.drawImage(
+     spritesheet,
+     currentFrame * frameWidth, 0, frameWidth, frameHeight,
+     x, y, frameWidth, frameHeight
+   );
+ 
+   currentFrame = (currentFrame + 1) % totalFrames;
+ }
+ 
+ // Função para atualizar e desenhar inimigos
+ function updateEnemies() {
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+ 
+   for (const enemy of enemies) {
+     updateAnimation(enemy.x, enemy.y);
+     enemy.x += enemy.speed / frameDelay;
+     enemy.y += enemy.speed / frameDelay;
+ 
+     // Checar colisões, remover inimigos, etc.
+ 
+     // Se inimigo saiu da tela, remova-o do array
+     if (enemy.x > canvas.width || enemy.y > canvas.height) {
+       const index = enemies.indexOf(enemy);
+       if (index !== -1) {
+         enemies.splice(index, 1);
+       }
+     }
+   }
+ 
+   requestAnimationFrame(updateEnemies); // Continuar a atualização da animação
+ }
+ 
+ // Carregar o spritesheet e iniciar a animação
+ spritesheet.onload = () => {
+   spawnEnemies();
+   updateEnemies();
+ };
+ 
+ // Spawn de inimigo
  function spawnEnemies() {
    const enemyCount = Math.floor(Math.random() * 3) + 1; // Randomly spawn 1 to 3 enemies
    for (let i = 0; i < enemyCount; i++) {

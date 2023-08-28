@@ -1,38 +1,36 @@
- // Get the canvas element
  const canvas = document.getElementById('gameCanvas');
  const ctx = canvas.getContext('2d');
 
- // Player object
+ // status do player
  const player = {
    x: canvas.width / 2,
    y: canvas.height / 2,
    radius: 10,
    color: 'blue',
-   speed: 300, // Pixels per second
+   speed: 300, // velocidade do player
    score: 0,
-   weapon: { type: 'Pistola', color: 'black', damage: 30, cooldown: 0.5, ability: 'none' },
+   weapon: { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'none' },
    powerUp: false,
-   powerUpDuration: 5, // Power-up duration in seconds
-   lives: 3, // Número inicial de vidas
+   powerUpDuration: 5, // tempo do power up
+   lives: 3, // numero de vidas
 
  };
-
- // Time variables
+ // variavel tempo
  let lastTime = 0;
  let deltaTime = 0;
 
- // Enemies array
+ // array inimigo
  const enemies = [];
 
- // Weapon pickups array
+ // icone das armas no chão
  const weaponPickups = [];
 
- // Bullets array
+ // array da bala
  const bullets = [];
 
- // Weapons array
+ // array das armas 
  const weapons = [
- { type: 'Pistola', color: 'black', damage: 30, cooldown: 0.5, ability: 'piercing' },
+ { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'piercing' },
    { type: 'shotgun', color: 'brown', damage: 20, cooldown: 1.5, ability: 'spread' },
    { type: 'machinegun', color: 'gray', damage: 15, cooldown: 0.2, ability: 'rapid' },
    { type: 'rocket launcher', color: 'orange', damage: 50, cooldown: 2.0, ability: 'explosive' },
@@ -42,7 +40,7 @@
    { type: 'railgun', color: 'cyan', damage: 80, cooldown: 3.0, ability: 'penetrating' },
  ];
 
- // Power-ups array
+ // array dos Power-ups 
  const powerUps = [
    { type: 'health', color: 'green', ability: 'healing' },
    { type: 'speed', color: 'cyan', ability: 'speed' },
@@ -231,13 +229,12 @@ if (player.weapon.ability === 'rapid') {
    if (keys.KeyA && player.x > 0) player.x -= player.speed * deltaTime;
    if (keys.KeyD && player.x < canvas.width) player.x += player.speed * deltaTime;
 
-   // Draw player
-   ctx.beginPath();
-   ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-   ctx.fillStyle = player.color;
-   ctx.fill();
-   ctx.closePath();
-
+      // Draw player
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+      ctx.fillStyle = player.color;
+      ctx.fill();
+      ctx.closePath();
    // Move and draw enemies
    enemies.forEach((enemy, index) => {
      // Calculate the direction vector towards the player
@@ -341,7 +338,7 @@ if (player.weapon.ability === 'rapid') {
        }
      });
 
-     // Draw bullet
+     // rastro da bala
      ctx.beginPath();
      ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
      ctx.fillStyle = bullet.color;
@@ -349,10 +346,13 @@ if (player.weapon.ability === 'rapid') {
      ctx.closePath();
    });
 
-   // Draw player score
+   // desenho do ponto do jogador
    ctx.font = '24px Arial';
    ctx.fillStyle = 'black';
-   ctx.fillText('Score: ' + player.score, 10, 30);
+   var formattedScore = 'Score: ' + player.score.toFixed(0); 
+   ctx.fillText(formattedScore, 10, 30);
+
+// desenho da vida do jogador
    ctx.font = '24px Arial';
 ctx.fillStyle = 'black';
 ctx.fillText('Lives: ' + player.lives, 10, 90);
@@ -379,7 +379,7 @@ ctx.fillText('Lives: ' + player.lives, 10, 90);
    }
 
    // Spawn enemies and weapon pickups randomly
-   if (Math.random() < 0.01) {
+   if (Math.random() < 0.009) {
      spawnEnemies();
    }
    if (Math.random() < 0.005) {
@@ -395,7 +395,6 @@ ctx.fillText('Lives: ' + player.lives, 10, 90);
 
  // Game over
  function gameOver() {
-  // Stop the game loop
   cancelAnimationFrame(gameLoop);
 
   // Aplica o efeito de blur na tela
@@ -414,10 +413,7 @@ ctx.fillText('Lives: ' + player.lives, 10, 90);
   ctx.fillText('Se lasco', canvas.width / 2 - 120, canvas.height / 2); // Exibe o texto
 }
 
-// Chame a função gameOver para testar
-gameOver();
-
- // Mouse event listeners
+ // detecta o mouse
  const mouse = { x: 0, y: 0 };
 
  canvas.addEventListener('mousemove', (event) => {
@@ -430,7 +426,8 @@ gameOver();
    fireBullet();
  });
 
- // Keyboard event listeners
+
+ // detecta o teclado 
  const keys = {};
 
  document.addEventListener('keydown', (event) => {
@@ -441,6 +438,7 @@ gameOver();
    keys[event.code] = false;
  });
 
- // Start the game loop
+
+
+ // loop do jogo
  requestAnimationFrame(gameLoop);
-//comentario

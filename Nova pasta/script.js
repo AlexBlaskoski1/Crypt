@@ -74,26 +74,24 @@
  
  // Função para atualizar e desenhar inimigos
  function updateEnemies() {
-   ctx.clearRect(0, 0, canvas.width, canvas.height);
- 
-   for (const enemy of enemies) {
-     updateAnimation(enemy.x, enemy.y);
-     enemy.x += enemy.speed / frameDelay;
-     enemy.y += enemy.speed / frameDelay;
- 
-     // Checar colisões, remover inimigos, etc.
- 
-     // Se inimigo saiu da tela, remova-o do array
-     if (enemy.x > canvas.width || enemy.y > canvas.height) {
-       const index = enemies.indexOf(enemy);
-       if (index !== -1) {
-         enemies.splice(index, 1);
-       }
-     }
-   }
- 
-   requestAnimationFrame(updateEnemies); // Continuar a atualização da animação
- }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (const enemy of enemies) {
+    updateAnimation(enemy.x, enemy.y);
+    enemy.x += enemy.speed / frameDelay;
+    enemy.y += enemy.speed / frameDelay;
+
+    // Checar colisões, remover inimigos, etc.
+
+    // Se inimigo saiu da tela, remova-o do array
+    if (enemy.x > canvas.width || enemy.y > canvas.height) {
+      const index = enemies.indexOf(enemy);
+      if (index !== -1) {
+        enemies.splice(index, 1);
+      }
+    }
+  }
+}
  
  // Carregar o spritesheet e iniciar a animação
  spritesheet.onload = () => {
@@ -108,8 +106,8 @@
      const enemy = {
        x: Math.random() * canvas.width,
        y: Math.random() * canvas.height,
-       radius: Math.random() * 20 + 10, // Vary enemy size
        color: 'red',
+       radius: 20,
        speed: Math.random() * 80 + 50, // Pixels per second
        health: 100, // Add health property to enemies
      };
@@ -329,6 +327,7 @@ if (player.weapon.ability === 'rapid') {
      }
 
      // Draw enemy
+     updateEnemies();
      ctx.beginPath();
      ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
      ctx.fillStyle = enemy.color;

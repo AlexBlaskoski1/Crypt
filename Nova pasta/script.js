@@ -32,14 +32,14 @@
 
  // Weapons array
  const weapons = [
- { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'piercing' },
-   { type: 'shotgun', color: 'brown', damage: 20, cooldown: 1.5, ability: 'spread' },
-   { type: 'machinegun', color: 'gray', damage: 15, cooldown: 0.2, ability: 'rapid' },
-   { type: 'rocket launcher', color: 'orange', damage: 50, cooldown: 2.0, ability: 'explosive' },
-   { type: 'sniper rifle', color: 'darkblue', damage: 100, cooldown: 2.5, ability: 'piercing' },
-   { type: 'flamethrower', color: 'red', damage: 5, cooldown: 0.1, ability: 'burning' },
-   { type: 'laser gun', color: 'purple', damage: 30, cooldown: 0.8, ability: 'piercing' },
-   { type: 'railgun', color: 'cyan', damage: 80, cooldown: 3.0, ability: 'penetrating' },
+ { type: 'Varinha1', color: 'black', damage: 10, cooldown: 0.5, ability: 'piercing' },
+   { type: 'Varinha2', color: 'brown', damage: 20, cooldown: 1.5, ability: 'spread' },
+   { type: 'Varinha3', color: 'gray', damage: 15, cooldown: 0.2, ability: 'rapid' },
+   { type: 'Varinha4', color: 'orange', damage: 50, cooldown: 2.0, ability: 'explosive' },
+   { type: 'Varinha5', color: 'darkblue', damage: 100, cooldown: 2.5, ability: 'piercing' },
+   { type: 'Varinha6', color: 'red', damage: 5, cooldown: 0.1, ability: 'burning' },
+   { type: 'Varinha7', color: 'purple', damage: 30, cooldown: 0.8, ability: 'piercing' },
+   { type: 'Varinha8', color: 'cyan', damage: 80, cooldown: 3.0, ability: 'penetrating' },
  ];
 
  // Power-ups array
@@ -60,7 +60,7 @@ playerSprite.src = 'mage_guardian-magenta.png';
  let currentFrame = 0;    // Índice do frame atual
  const totalFrames = 12;   // Número total de frames no spritesheet
  
- const frameDelay = 100;  // Atraso em milissegundos entre os quadros
+ const frameDelay = 500;  // Atraso em milissegundos entre os quadros
  
  // Array para armazenar inimigos
  
@@ -120,16 +120,16 @@ function updateAnimation(x, y) {
 
  // Spawn weapon pickups
  function spawnWeaponPickups() {
-   const weapon = weapons[Math.floor(Math.random() * weapons.length)];
-   const weaponPickup = {
-     x: Math.random() * canvas.width,
-     y: Math.random() * canvas.height,
-     radius: 6,
-     color: weapon.color,
-     weapon: weapon,
-   };
-   weaponPickups.push(weaponPickup);
- }
+  const weapon = weapons[Math.floor(Math.random() * weapons.length)];
+  const weaponPickup = {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: 6,
+    color: weapon.color,
+    weapon: weapon,
+  };
+  weaponPickups.push(weaponPickup);
+}
 
  // Spawn power-ups
  function spawnPowerUps() {
@@ -337,26 +337,28 @@ if (player.weapon.ability === 'rapid') {
 
    // Move and draw weapon pickups
    weaponPickups.forEach((pickup, index) => {
-     const dx = player.x - pickup.x;
-     const dy = player.y - pickup.y;
-     const distance = Math.sqrt(dx * dx + dy * dy);
-     if (distance < player.radius + pickup.radius) {
-       if (pickup.weapon) {
-         player.weapon = pickup.weapon;
-       } else if (pickup.powerUp) {
-         player.powerUp = pickup.powerUp;
-         applyPowerUpAbility();
-       }
-       weaponPickups.splice(index, 1);
-     }
-
-     // Draw weapon or power-up pickup
-     ctx.beginPath();
-     ctx.arc(pickup.x, pickup.y, pickup.radius, 0, Math.PI * 2);
-     ctx.fillStyle = pickup.color;
-     ctx.fill();
-     ctx.closePath();
-   });
+    const dx = player.x - pickup.x;
+    const dy = player.y - pickup.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+  
+    if (distance < player.radius + pickup.radius) {
+      if (pickup.weapon) {
+        player.weapon = pickup.weapon;
+      } else if (pickup.powerUp) {
+        player.powerUp = pickup.powerUp;
+        applyPowerUpAbility();
+      }
+      weaponPickups.splice(index, 1);
+    }
+  
+    // Draw weapon or power-up pickup
+    const weaponImage = new Image();
+    weaponImage.src = 'weapons/' + pickup.weapon.type.toLowerCase() + '.png'; // Assuming your weapon images are named like "pistola.png", "shotgun.png", etc.
+    weaponImage.onload = () => {
+      ctx.drawImage(weaponImage, pickup.x - pickup.radius, pickup.y - pickup.radius, pickup.radius * 2, pickup.radius * 2);
+    };
+  });
+  
 
    // Move and draw bullets
    bullets.forEach((bullet, index) => {

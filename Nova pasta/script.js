@@ -10,7 +10,7 @@
    color: 'blue',
    speed: 300, // Pixels per second
    score: 0,
-   weapon: { type: 'Pistola', color: 'black', damage: 100, cooldown: 0.5, ability: 'none' },
+   weapon: { type: 'Cajado Ametista', color: 'black', damage: 10, cooldown: 0.5, ability: 'none' },
    powerUp: false,
    powerUpDuration: 5, // Power-up duration in seconds
    lives: 3, // Número inicial de vidas
@@ -32,14 +32,14 @@
 
  // Weapons array
  const weapons = [
- { type: 'Varinha1', color: 'black', damage: 10, cooldown: 0.5, ability: 'piercing' },
-   { type: 'Varinha2', color: 'brown', damage: 20, cooldown: 1.5, ability: 'spread' },
-   { type: 'Varinha3', color: 'gray', damage: 15, cooldown: 0.2, ability: 'rapid' },
-   { type: 'Varinha4', color: 'orange', damage: 50, cooldown: 2.0, ability: 'explosive' },
-   { type: 'Varinha5', color: 'darkblue', damage: 100, cooldown: 2.5, ability: 'piercing' },
-   { type: 'Varinha6', color: 'red', damage: 5, cooldown: 0.1, ability: 'burning' },
-   { type: 'Varinha7', color: 'purple', damage: 30, cooldown: 0.8, ability: 'piercing' },
-   { type: 'Varinha8', color: 'cyan', damage: 80, cooldown: 3.0, ability: 'penetrating' },
+ { type: 'Cajado AMETISTA APRIMORADO', color: 'black', damage: 10, cooldown: 0.5, ability: 'piercing' },
+   { type: 'Cajado Ametista', color: 'brown', damage: 20, cooldown: 1.5, ability: 'spread' },
+   { type: 'Cajado Supremo', color: 'gray', damage: 100, cooldown: 0.2, ability: 'rapid' },
+   { type: 'Estilingue', color: 'orange', damage: 10, cooldown: 2.0, ability: 'explosive' },
+   { type: 'Varinha CARMIN APRIMORADA', color: 'darkblue', damage: 100, cooldown: 2.5, ability: 'piercing' },
+   { type: 'Varinha Carmin', color: 'red', damage: 5, cooldown: 0.1, ability: 'burning' },
+   { type: 'Varinha de GELO APRIMORADA.', color: 'purple', damage: 40, cooldown: 0.8, ability: 'piercing' },
+   { type: 'Varinha de Gelo', color: 'cyan', damage: 20, cooldown: 3.0, ability: 'penetrating' },
  ];
 
  // Power-ups array

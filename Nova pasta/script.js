@@ -10,7 +10,7 @@
    color: 'blue',
    speed: 300, // Pixels per second
    score: 0,
-   weapon: { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'none' },
+   weapon: { type: 'Pistola', color: 'black', damage: 100, cooldown: 0.5, ability: 'none' },
    powerUp: false,
    powerUpDuration: 5, // Power-up duration in seconds
    lives: 3, // Número inicial de vidas
@@ -65,16 +65,16 @@ playerSprite.src = 'mage_guardian-magenta.png';
  // Array para armazenar inimigos
  
  // Função para atualizar a animação
- function updateAnimation(x, y) {
-   ctx.drawImage(
-     spritesheet,
-     currentFrame * frameWidth, 0, frameWidth, frameHeight,
-     x, y, frameWidth, frameHeight
-   );
- 
-   currentFrame = (currentFrame + 1) % totalFrames;
- }
- 
+function updateAnimation(x, y) {
+  ctx.drawImage(
+    playerSprite,
+    currentFrame * frameWidth, 0, frameWidth, frameHeight,
+    x, y, frameWidth, frameHeight
+  );
+
+  currentFrame = (currentFrame + 1) % totalFrames;
+}
+
  // Função para atualizar e desenhar inimigos
  function updateEnemies() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -286,7 +286,7 @@ if (player.weapon.ability === 'rapid') {
 
    // Draw player
    ctx.beginPath();
-   ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+   updateAnimation(player.x - frameWidth / 2, player.y - frameHeight / 2);
    ctx.fillStyle = player.color;
    ctx.fill();
    ctx.closePath();
@@ -329,14 +329,11 @@ if (player.weapon.ability === 'rapid') {
        enemies.splice(index, 1);
      }
 
-     // Draw enemy
-     updateEnemies();
-     ctx.beginPath();
-     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-     ctx.fillStyle = enemy.color;
-     ctx.fill();
-     ctx.closePath();
-   });
+     updateAnimation(enemy.x - frameWidth / 2, enemy.y - frameHeight / 2);
+    });
+    
+    // Draw player animation
+    updateAnimation(player.x - frameWidth / 2, player.y - frameHeight / 2);
 
    // Move and draw weapon pickups
    weaponPickups.forEach((pickup, index) => {

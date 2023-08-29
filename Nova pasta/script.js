@@ -48,6 +48,9 @@
    { type: 'speed', color: 'cyan', ability: 'speed' },
    { type: 'invincibility', color: 'gold', ability: 'invincible' },
  ];
+ const playerSprite = new Image();
+playerSprite.src = 'mage_guardian-magenta.png';
+
 
  const spritesheet = new Image();
  spritesheet.src = 'mage_guardian-blue.png';

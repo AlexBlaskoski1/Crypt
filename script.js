@@ -508,6 +508,9 @@ gameOver();
    const somElement = document.getElementById('hit');
    somElement.volume = 0.5;
    somElement.play();
+   const somElement2 = document.getElementById('musica');
+   somElement2.volume = 0.5;
+   somElement2.play();
  });
 
  // Keyboard event listeners

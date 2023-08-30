@@ -349,6 +349,9 @@ if (player.weapon.ability === 'rapid') {
           gameOver();
         } else {
           enemies.splice(index, 1);
+          const somElement = document.getElementById('hit');
+          somElement.volume = 0.5;
+          somElement.play();
         }
       }
     }
@@ -395,6 +398,7 @@ weaponPickups.forEach((pickup, index) => {
 
    // Move and draw bullets
    bullets.forEach((bullet, index) => {
+    
      bullet.x += bullet.velocity.x * deltaTime;
      bullet.y += bullet.velocity.y * deltaTime;
 
@@ -514,6 +518,9 @@ gameOver();
 
  canvas.addEventListener('mousedown', () => {
    fireBullet();
+   const somElement = document.getElementById('hit');
+   somElement.volume = 0.5;
+   somElement.play();
  });
 
  // Keyboard event listeners

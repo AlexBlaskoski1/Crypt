@@ -44,9 +44,6 @@
 
  // Power-ups array
  const powerUps = [
-   { type: 'health', color: 'green', ability: 'healing' },
-   { type: 'speed', color: 'cyan', ability: 'speed' },
-   { type: 'invincibility', color: 'gold', ability: 'invincible' },
  ];
  const newPlayerSprite = new Image();
  newPlayerSprite.src = 'mage_guardian-magenta.png'; 

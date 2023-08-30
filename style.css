@@ -4,6 +4,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+  position: relative; /* Adicionado */
 }
 
 #weaponIcon {
@@ -15,20 +16,23 @@ body {
 
 #gameCanvasContainer {
   position: absolute;
-}
-
-#weaponImage {
-  width: 50px; /* Ajuste o tamanho conforme necessário */
-  height: 50px; /* Ajuste o tamanho conforme necessário */
+  display: flex; /* Adicionado */
+  align-items: center; /* Adicionado */
+  left: 0;
+  margin-left: 10px;
 }
 
 canvas {
   border: 1px solid black;
   display: block;
-  margin: 0 auto;
 }
 
-.no-select {
-  user-select: none; 
-  pointer-events: none; 
+#linkToIndex2 {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
 }

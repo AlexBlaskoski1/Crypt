@@ -25,6 +25,9 @@
 </body>
 </html>
 <script>
+ const somElement = document.getElementById('musica');
+somElement.volume = 0.3;
+somElement.play();
   document.addEventListener("DOMContentLoaded", function() {
   document.addEventListener("keydown", function(event) {
     if (event.key === "o" || event.key === "O") {
@@ -32,8 +35,4 @@
     }
   });
 });
-const somElement = document.getElementById('musica');
-somElement.volume = 0.3;
-somElement.play();
-
 </script>

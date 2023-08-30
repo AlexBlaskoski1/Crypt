@@ -1,7 +1,7 @@
  // Get the canvas element
  const canvas = document.getElementById('gameCanvas');
  const ctx = canvas.getContext('2d');
-
+ const FRAME_INTERVAL = 1000 / 60; // 16.67 ms
  // Player object
  const player = {
    x: canvas.width / 2,
@@ -10,7 +10,7 @@
    color: 'blue',
    speed: 300, // Pixels per second
    score: 0,
-   weapon: { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'none' },
+   weapon: { type: 'Cajado Ametista', color: 'black', damage: 10, cooldown: 0.5, ability: 'none' },
    powerUp: false,
    powerUpDuration: 5, // Power-up duration in seconds
    lives: 3, // Número inicial de vidas
@@ -32,14 +32,13 @@
 
  // Weapons array
  const weapons = [
- { type: 'Pistola', color: 'black', damage: 10, cooldown: 0.5, ability: 'piercing' },
-   { type: 'shotgun', color: 'brown', damage: 20, cooldown: 1.5, ability: 'spread' },
-   { type: 'machinegun', color: 'gray', damage: 15, cooldown: 0.2, ability: 'rapid' },
-   { type: 'rocket launcher', color: 'orange', damage: 50, cooldown: 2.0, ability: 'explosive' },
-   { type: 'sniper rifle', color: 'darkblue', damage: 100, cooldown: 2.5, ability: 'piercing' },
-   { type: 'flamethrower', color: 'red', damage: 5, cooldown: 0.1, ability: 'burning' },
-   { type: 'laser gun', color: 'purple', damage: 30, cooldown: 0.8, ability: 'piercing' },
-   { type: 'railgun', color: 'cyan', damage: 80, cooldown: 3.0, ability: 'penetrating' },
+ { type: 'Cajado AMETISTA APRIMORADO', color: 'black', damage: 10, cooldown: 0.5, ability: 'piercing' },
+   { type: 'Cajado Ametista', color: 'brown', damage: 20, cooldown: 1.5, ability: 'spread' },
+   { type: 'Cajado Supremo', color: 'gray', damage: 100, cooldown: 0.2, ability: 'rapid' },
+   { type: 'Estilingue', color: 'orange', damage: 10, cooldown: 2.0, ability: 'explosive' },
+   { type: 'Varinha CARMIN APRIMORADA', color: 'darkblue', damage: 100, cooldown: 2.5, ability: 'piercing' },
+   { type: 'Varinha Carmin', color: 'red', damage: 5, cooldown: 0.1, ability: 'burning' },
+   { type: 'Varinha de Gelo', color: 'cyan', damage: 20, cooldown: 3.0, ability: 'penetrating' },
  ];
 
  // Power-ups array
@@ -48,16 +47,94 @@
    { type: 'speed', color: 'cyan', ability: 'speed' },
    { type: 'invincibility', color: 'gold', ability: 'invincible' },
  ];
+ const newPlayerSprite = new Image();
+ newPlayerSprite.src = 'mage_guardian-magenta.png'; 
 
- // Spawn enemies
+
+ const spritesheet = new Image();
+ spritesheet.src = 'mage_guardian-blue.png';
+ 
+ const frameWidth = 64;  // Largura de cada frame
+ const frameHeight = 64; // Altura de cada frame
+ let currentFrame = 0;    // Índice do frame atual
+ const totalFrames = 12;   // Número total de frames no spritesheet
+ 
+ const frameDelay = 500;  // Atraso em milissegundos entre os quadros
+ 
+ // Array para armazenar inimigos
+ // Carregar imagens de armas
+const weaponImages = {};
+weapons.forEach((weapon) => {
+  const image = new Image();
+  image.src = 'weapons/' + weapon.type.toLowerCase() + '.png';
+  weaponImages[weapon.type] = image;
+});
+
+ // Função para atualizar a animação
+function updateAnimation(x, y) {
+  ctx.drawImage(
+    newPlayerSprite,  // Usando a nova imagem do jogador
+    currentFrame * frameWidth, 0, frameWidth, frameHeight,
+    x, y, frameWidth, frameHeight
+  );
+
+  currentFrame = (currentFrame + 1) % totalFrames;
+}
+
+ // Função para atualizar e desenhar inimigos
+ function updateEnemies() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (const enemy of enemies) {
+    updateAnimation(enemy.x, enemy.y);
+    enemy.x += enemy.speed / frameDelay;
+    enemy.y += enemy.speed / frameDelay;
+
+    // Checar colisões, remover inimigos, etc.
+
+    // Se inimigo saiu da tela, remova-o do array
+    if (enemy.x > canvas.width || enemy.y > canvas.height) {
+      const index = enemies.indexOf(enemy);
+      if (index !== -1) {
+        enemies.splice(index, 1);
+      }
+    }
+  }
+}
+const weaponIcon = document.getElementById('weaponIcon');
+const weaponImage = document.getElementById('weaponImage');
+
+// Atualize o ícone da arma
+function updateWeaponIcon() {
+  weaponImage.src = 'weapons/' + player.weapon.type.toLowerCase() + '.png';
+}
+
+// Chame a função para atualizar o ícone da arma
+updateWeaponIcon();
+
+// Atualize a posição do ícone da arma fora do canvas
+function updateWeaponIconPosition() {
+  weaponIcon.style.left = (canvas.width + 20) + 'px';  // Posicione à direita do canvas
+  weaponIcon.style.top = (canvas.height / 2) + 'px';   // Posicione verticalmente no meio
+}
+
+// Chame a função para atualizar a posição do ícone da arma
+updateWeaponIconPosition();
+ // Carregar o spritesheet e iniciar a animação
+ spritesheet.onload = () => {
+   spawnEnemies();
+   updateEnemies();
+ };
+ 
+ // Spawn de inimigo
  function spawnEnemies() {
    const enemyCount = Math.floor(Math.random() * 3) + 1; // Randomly spawn 1 to 3 enemies
    for (let i = 0; i < enemyCount; i++) {
      const enemy = {
        x: Math.random() * canvas.width,
        y: Math.random() * canvas.height,
-       radius: Math.random() * 20 + 10, // Vary enemy size
        color: 'red',
+       radius: 20,
        speed: Math.random() * 80 + 50, // Pixels per second
        health: 100, // Add health property to enemies
      };
@@ -65,31 +142,43 @@
    }
  }
 
- // Spawn weapon pickups
- function spawnWeaponPickups() {
-   const weapon = weapons[Math.floor(Math.random() * weapons.length)];
-   const weaponPickup = {
-     x: Math.random() * canvas.width,
-     y: Math.random() * canvas.height,
-     radius: 6,
-     color: weapon.color,
-     weapon: weapon,
-   };
-   weaponPickups.push(weaponPickup);
- }
+// Spawn weapon pickups
+function spawnWeaponPickups() {
+  const weapon = weapons[Math.floor(Math.random() * weapons.length)];
+  const weaponPickup = {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: 6,
+    color: weapon.color,
+    weapon: weapon,
+  };
+  weaponPickups.push(weaponPickup);
 
- // Spawn power-ups
- function spawnPowerUps() {
-   const powerUp = powerUps[Math.floor(Math.random() * powerUps.length)];
-   const powerUpPickup = {
-     x: Math.random() * canvas.width,
-     y: Math.random() * canvas.height,
-     radius: 8,
-     color: powerUp.color,
-     powerUp: powerUp,
-   };
-   weaponPickups.push(powerUpPickup);
- }
+  const weaponImage = new Image();
+  weaponImage.src = 'weapons/' + weapon.type.toLowerCase() + '.png';
+  weaponImage.onload = () => {
+    ctx.drawImage(
+      weaponImage,
+      weaponPickup.x - weaponPickup.radius,
+      weaponPickup.y - weaponPickup.radius,
+      weaponPickup.radius * 2,
+      weaponPickup.radius * 2
+    );
+  };
+}
+
+// Spawn power-ups
+function spawnPowerUps() {
+  const powerUp = powerUps[Math.floor(Math.random() * powerUps.length)];
+  const powerUpPickup = {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: 8,
+    color: powerUp.color,
+    powerUp: powerUp, // Make sure powerUp is properly defined here
+  };
+  weaponPickups.push(powerUpPickup);
+}
 
 // Fire bullet
 function fireBullet() {
@@ -233,7 +322,7 @@ if (player.weapon.ability === 'rapid') {
 
    // Draw player
    ctx.beginPath();
-   ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+   updateAnimation(player.x - frameWidth / 2, player.y - frameHeight / 2);
    ctx.fillStyle = player.color;
    ctx.fill();
    ctx.closePath();
@@ -250,7 +339,8 @@ if (player.weapon.ability === 'rapid') {
      // Move the enemy towards the player
      enemy.x += directionX * enemy.speed * deltaTime;
      enemy.y += directionY * enemy.speed * deltaTime;
-
+     updateWeaponIcon();
+     updateWeaponIconPosition();
      // Detect collision with player
      if (distance < player.radius + enemy.radius) {
        if (!player.invincible) {
@@ -258,10 +348,10 @@ if (player.weapon.ability === 'rapid') {
         if (player.lives <= 0) {
           gameOver();
         } else {
-          // Redefina a posição do jogador ou realize outras ações necessárias após perder uma vida
-          player.x = canvas.width / 2;
-          player.y = canvas.height / 2;
-          // Outras ações necessárias após a perda de uma vida
+          enemies.splice(index, 1);
+          const somElement = document.getElementById('hit');
+          somElement.volume = 0.5;
+          somElement.play();
         }
       }
     }
@@ -276,39 +366,39 @@ if (player.weapon.ability === 'rapid') {
        enemies.splice(index, 1);
      }
 
-     // Draw enemy
-     ctx.beginPath();
-     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-     ctx.fillStyle = enemy.color;
-     ctx.fill();
-     ctx.closePath();
-   });
+     updateAnimation(enemy.x - frameWidth / 2, enemy.y - frameHeight / 2);
+    });
+    
+    // Draw player animation
+    updateAnimation(player.x - frameWidth / 2, player.y - frameHeight / 2);
 
-   // Move and draw weapon pickups
-   weaponPickups.forEach((pickup, index) => {
-     const dx = player.x - pickup.x;
-     const dy = player.y - pickup.y;
-     const distance = Math.sqrt(dx * dx + dy * dy);
-     if (distance < player.radius + pickup.radius) {
-       if (pickup.weapon) {
-         player.weapon = pickup.weapon;
-       } else if (pickup.powerUp) {
-         player.powerUp = pickup.powerUp;
-         applyPowerUpAbility();
-       }
-       weaponPickups.splice(index, 1);
-     }
+ // Dentro do loop de jogo (gameLoop)
+// Move and draw weapon pickups
+weaponPickups.forEach((pickup, index) => {
+  const dx = player.x - pickup.x;
+  const dy = player.y - pickup.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
 
-     // Draw weapon or power-up pickup
-     ctx.beginPath();
-     ctx.arc(pickup.x, pickup.y, pickup.radius, 0, Math.PI * 2);
-     ctx.fillStyle = pickup.color;
-     ctx.fill();
-     ctx.closePath();
-   });
+  if (distance < player.radius + pickup.radius) {
+    if (pickup.weapon) {
+      player.weapon = pickup.weapon;
+    } else if (pickup.powerUp) {
+      player.powerUp = pickup.powerUp;
+      applyPowerUpAbility();
+    }
+    weaponPickups.splice(index, 1);
+  }
+
+  if (pickup.weapon) {
+    const weaponImage = weaponImages[pickup.weapon.type];
+    ctx.drawImage(weaponImage, pickup.x - pickup.radius, pickup.y - pickup.radius, pickup.radius * 2, pickup.radius * 2);
+  }
+});
+  
 
    // Move and draw bullets
    bullets.forEach((bullet, index) => {
+    
      bullet.x += bullet.velocity.x * deltaTime;
      bullet.y += bullet.velocity.y * deltaTime;
 
@@ -428,6 +518,9 @@ gameOver();
 
  canvas.addEventListener('mousedown', () => {
    fireBullet();
+   const somElement = document.getElementById('hit');
+   somElement.volume = 0.5;
+   somElement.play();
  });
 
  // Keyboard event listeners
@@ -444,4 +537,4 @@ gameOver();
  // Start the game loop
  requestAnimationFrame(gameLoop);
 
- //teste bonito
+ 

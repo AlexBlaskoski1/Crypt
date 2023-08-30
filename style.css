@@ -1,5 +1,34 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#weaponIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+}
+
+#gameCanvasContainer {
+  position: absolute;
+}
+
+#weaponImage {
+  width: 50px; /* Ajuste o tamanho conforme necessário */
+  height: 50px; /* Ajuste o tamanho conforme necessário */
+}
+
 canvas {
-    border: 1px solid black;
-    display: block;
-    margin: 0 auto;
-  }
+  border: 1px solid black;
+  display: block;
+  margin: 0 auto;
+}
+
+.no-select {
+  user-select: none; 
+  pointer-events: none; 
+}

@@ -1,7 +1,7 @@
  // Get the canvas element
  const canvas = document.getElementById('gameCanvas');
  const ctx = canvas.getContext('2d');
-
+ const FRAME_INTERVAL = 1000 / 60; // 16.67 ms
  // Player object
  const player = {
    x: canvas.width / 2,
@@ -48,8 +48,8 @@
    { type: 'speed', color: 'cyan', ability: 'speed' },
    { type: 'invincibility', color: 'gold', ability: 'invincible' },
  ];
- const playerSprite = new Image();
-playerSprite.src = 'mage_guardian-magenta.png';
+ const newPlayerSprite = new Image();
+ newPlayerSprite.src = 'mage_guardian-magenta.png'; 
 
 
  const spritesheet = new Image();
@@ -63,11 +63,18 @@ playerSprite.src = 'mage_guardian-magenta.png';
  const frameDelay = 500;  // Atraso em milissegundos entre os quadros
  
  // Array para armazenar inimigos
- 
+ // Carregar imagens de armas
+const weaponImages = {};
+weapons.forEach((weapon) => {
+  const image = new Image();
+  image.src = 'weapons/' + weapon.type.toLowerCase() + '.png';
+  weaponImages[weapon.type] = image;
+});
+
  // Função para atualizar a animação
 function updateAnimation(x, y) {
   ctx.drawImage(
-    playerSprite,
+    newPlayerSprite,  // Usando a nova imagem do jogador
     currentFrame * frameWidth, 0, frameWidth, frameHeight,
     x, y, frameWidth, frameHeight
   );
@@ -95,7 +102,25 @@ function updateAnimation(x, y) {
     }
   }
 }
- 
+const weaponIcon = document.getElementById('weaponIcon');
+const weaponImage = document.getElementById('weaponImage');
+
+// Atualize o ícone da arma
+function updateWeaponIcon() {
+  weaponImage.src = 'weapons/' + player.weapon.type.toLowerCase() + '.png';
+}
+
+// Chame a função para atualizar o ícone da arma
+updateWeaponIcon();
+
+// Atualize a posição do ícone da arma fora do canvas
+function updateWeaponIconPosition() {
+  weaponIcon.style.left = (canvas.width + 20) + 'px';  // Posicione à direita do canvas
+  weaponIcon.style.top = (canvas.height / 2) + 'px';   // Posicione verticalmente no meio
+}
+
+// Chame a função para atualizar a posição do ícone da arma
+updateWeaponIconPosition();
  // Carregar o spritesheet e iniciar a animação
  spritesheet.onload = () => {
    spawnEnemies();
@@ -118,8 +143,8 @@ function updateAnimation(x, y) {
    }
  }
 
- // Spawn weapon pickups
- function spawnWeaponPickups() {
+// Spawn weapon pickups
+function spawnWeaponPickups() {
   const weapon = weapons[Math.floor(Math.random() * weapons.length)];
   const weaponPickup = {
     x: Math.random() * canvas.width,
@@ -129,20 +154,32 @@ function updateAnimation(x, y) {
     weapon: weapon,
   };
   weaponPickups.push(weaponPickup);
+
+  const weaponImage = new Image();
+  weaponImage.src = 'weapons/' + weapon.type.toLowerCase() + '.png';
+  weaponImage.onload = () => {
+    ctx.drawImage(
+      weaponImage,
+      weaponPickup.x - weaponPickup.radius,
+      weaponPickup.y - weaponPickup.radius,
+      weaponPickup.radius * 2,
+      weaponPickup.radius * 2
+    );
+  };
 }
 
- // Spawn power-ups
- function spawnPowerUps() {
-   const powerUp = powerUps[Math.floor(Math.random() * powerUps.length)];
-   const powerUpPickup = {
-     x: Math.random() * canvas.width,
-     y: Math.random() * canvas.height,
-     radius: 8,
-     color: powerUp.color,
-     powerUp: powerUp,
-   };
-   weaponPickups.push(powerUpPickup);
- }
+// Spawn power-ups
+function spawnPowerUps() {
+  const powerUp = powerUps[Math.floor(Math.random() * powerUps.length)];
+  const powerUpPickup = {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: 8,
+    color: powerUp.color,
+    powerUp: powerUp, // Make sure powerUp is properly defined here
+  };
+  weaponPickups.push(powerUpPickup);
+}
 
 // Fire bullet
 function fireBullet() {
@@ -303,7 +340,8 @@ if (player.weapon.ability === 'rapid') {
      // Move the enemy towards the player
      enemy.x += directionX * enemy.speed * deltaTime;
      enemy.y += directionY * enemy.speed * deltaTime;
-
+     updateWeaponIcon();
+     updateWeaponIconPosition();
      // Detect collision with player
      if (distance < player.radius + enemy.radius) {
        if (!player.invincible) {
@@ -335,29 +373,28 @@ if (player.weapon.ability === 'rapid') {
     // Draw player animation
     updateAnimation(player.x - frameWidth / 2, player.y - frameHeight / 2);
 
-   // Move and draw weapon pickups
-   weaponPickups.forEach((pickup, index) => {
-    const dx = player.x - pickup.x;
-    const dy = player.y - pickup.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-  
-    if (distance < player.radius + pickup.radius) {
-      if (pickup.weapon) {
-        player.weapon = pickup.weapon;
-      } else if (pickup.powerUp) {
-        player.powerUp = pickup.powerUp;
-        applyPowerUpAbility();
-      }
-      weaponPickups.splice(index, 1);
+ // Dentro do loop de jogo (gameLoop)
+// Move and draw weapon pickups
+weaponPickups.forEach((pickup, index) => {
+  const dx = player.x - pickup.x;
+  const dy = player.y - pickup.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  if (distance < player.radius + pickup.radius) {
+    if (pickup.weapon) {
+      player.weapon = pickup.weapon;
+    } else if (pickup.powerUp) {
+      player.powerUp = pickup.powerUp;
+      applyPowerUpAbility();
     }
-  
-    // Draw weapon or power-up pickup
-    const weaponImage = new Image();
-    weaponImage.src = 'weapons/' + pickup.weapon.type.toLowerCase() + '.png'; // Assuming your weapon images are named like "pistola.png", "shotgun.png", etc.
-    weaponImage.onload = () => {
-      ctx.drawImage(weaponImage, pickup.x - pickup.radius, pickup.y - pickup.radius, pickup.radius * 2, pickup.radius * 2);
-    };
-  });
+    weaponPickups.splice(index, 1);
+  }
+
+  if (pickup.weapon) {
+    const weaponImage = weaponImages[pickup.weapon.type];
+    ctx.drawImage(weaponImage, pickup.x - pickup.radius, pickup.y - pickup.radius, pickup.radius * 2, pickup.radius * 2);
+  }
+});
   
 
    // Move and draw bullets

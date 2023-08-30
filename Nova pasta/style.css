@@ -1,5 +1,22 @@
-canvas {
-    border: 1px solid black;
-    display: block;
-    margin: 0 auto;
-  }
+canvas 
+{
+border: 1px solid black;
+display: block;
+margin: 0 auto;
+}
+.weapon-info {
+  position: absolute;
+  top: 20px; /* Ajuste essa propriedade para definir a distância do topo */
+  right: 20px; /* Ajuste essa propriedade para definir a distância da direita */
+  display: flex; /* Use flex para alinhar os elementos horizontalmente */
+  align-items: center; /* Alinhe os elementos verticalmente ao centro */
+}
+
+#weaponName {
+  margin-right: 10px; /* Adicione margem à direita para separar o nome da arma do ícone */
+}
+
+#weaponIcon {
+  width: 50px; /* Ajuste o tamanho do ícone conforme necessário */
+  height: 50px;
+}

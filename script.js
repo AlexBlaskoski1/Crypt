@@ -166,17 +166,6 @@ function spawnWeaponPickups() {
 }
 
 // Spawn power-ups
-function spawnPowerUps() {
-  const powerUp = powerUps[Math.floor(Math.random() * powerUps.length)];
-  const powerUpPickup = {
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    radius: 8,
-    color: powerUp.color,
-    powerUp: powerUp, // Make sure powerUp is properly defined here
-  };
-  weaponPickups.push(powerUpPickup);
-}
 
 // Fire bullet
 function fireBullet() {

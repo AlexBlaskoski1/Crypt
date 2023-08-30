@@ -38,7 +38,6 @@
    { type: 'Estilingue', color: 'orange', damage: 10, cooldown: 2.0, ability: 'explosive' },
    { type: 'Varinha CARMIN APRIMORADA', color: 'darkblue', damage: 100, cooldown: 2.5, ability: 'piercing' },
    { type: 'Varinha Carmin', color: 'red', damage: 5, cooldown: 0.1, ability: 'burning' },
-   { type: 'Varinha de GELO APRIMORADA.', color: 'purple', damage: 40, cooldown: 0.8, ability: 'piercing' },
    { type: 'Varinha de Gelo', color: 'cyan', damage: 20, cooldown: 3.0, ability: 'penetrating' },
  ];
 

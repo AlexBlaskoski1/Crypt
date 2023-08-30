@@ -348,10 +348,7 @@ if (player.weapon.ability === 'rapid') {
         if (player.lives <= 0) {
           gameOver();
         } else {
-          // Redefina a posição do jogador ou realize outras ações necessárias após perder uma vida
-          player.x = canvas.width / 2;
-          player.y = canvas.height / 2;
-          // Outras ações necessárias após a perda de uma vida
+          enemies.splice(index, 1);
         }
       }
     }
@@ -533,4 +530,4 @@ gameOver();
  // Start the game loop
  requestAnimationFrame(gameLoop);
 
- //teste bonito
+ 

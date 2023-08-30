@@ -463,7 +463,7 @@ ctx.fillText('Lives: ' + player.lives, 10, 90);
      spawnWeaponPickups();
    }
    if (Math.random() < 0.002) {
-     spawnPowerUps();
+    spawnWeaponPickups();
    }
 
    // Call the game loop recursively

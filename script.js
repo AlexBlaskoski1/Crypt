@@ -135,7 +135,7 @@ updateWeaponIconPosition();
        y: Math.random() * canvas.height,
        color: 'red',
        radius: 20,
-       speed: Math.random() * 80 + 50, // Pixels per second
+       speed: Math.random() * 10 + 20, // Pixels per second
        health: 100, // Add health property to enemies
      };
      enemies.push(enemy);
@@ -501,7 +501,7 @@ ctx.fillText('Lives: ' + player.lives, 10, 90);
   ctx.drawImage(tempCanvas, 0, 0); // Renderiza o blur
   ctx.font = '48px Arial';
   ctx.fillStyle = 'black';
-  ctx.fillText('Se lasco', canvas.width / 2 - 120, canvas.height / 2); // Exibe o texto
+  ctx.fillText('Game Over', canvas.width / 2 - 120, canvas.height / 2); // Exibe o texto
 }
 
 // Chame a função gameOver para testar
